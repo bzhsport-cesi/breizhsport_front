@@ -35,11 +35,4 @@ jobs:
           ANSIBLE_USER: ${{ secrets.ANSIBLE_USER }}
           ANSIBLE_HOST_KEY_CHECKING: False
         run: |
-          ansible-playbook -i terraform/inventory ansible/playbook.yml \
-            --private-key private_key.pem \
-            -u ${{ secrets.ANSIBLE_USER }} \
-            --ssh-common-args='-o StrictHostKeyChecking=no' \
-            --extra-vars ansible_user=${{ secrets.ANSIBLE_USER }} \
-            --extra-vars registry_username=${{ github.repository_owner }} \
-            --extra-vars registry_token=${{ secrets.GITHUB_TOKEN }} \
-            --extra-vars image_name=ghcr.io/${{ github.repository }}:master
+          ansible-playbook -i terraform/inventory ansible/playbook.yml --private-key private_key.pem -u ${{ secrets.ANSIBLE_USER }} --ssh-common-args='-o StrictHostKeyChecking=no' --extra-vars ansible_user=${{ secrets.ANSIBLE_USER }} --extra-vars registry_username=${{ github.repository_owner }} --extra-vars registry_token=${{ secrets.GITHUB_TOKEN }} --extra-vars image_name=ghcr.io/${{ github.repository }}:master
