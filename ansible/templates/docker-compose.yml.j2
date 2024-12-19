@@ -5,3 +5,7 @@ services:
       - bzh_network
     ports:
       - '8080:3000'
+
+networks:
+  bzh_network:
+    driver: bridge
