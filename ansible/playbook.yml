@@ -16,7 +16,7 @@
         update_cache: yes
 
     - name: Create a network
-      docker_network:
+      community.docker.docker_network:
         name: bzh_network
 
     - name: Log into registry 
