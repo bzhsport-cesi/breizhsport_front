@@ -15,7 +15,7 @@
         state: present
         update_cache: yes
 
-    - name: Create a network
+    - name: Network is present
       community.docker.docker_network:
         name: bzh_network
 
