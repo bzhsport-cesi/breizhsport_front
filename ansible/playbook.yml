@@ -15,6 +15,10 @@
         state: present
         update_cache: yes
 
+    - name: Create a network
+      docker_network:
+        name: bzh_network
+
     - name: Log into registry 
       community.docker.docker_login:
         registry_url: ghcr.io
