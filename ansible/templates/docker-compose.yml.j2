@@ -1,7 +1,7 @@
 services:
   app:
     image: {{ image_name }}
-    network: 
+    networks: 
       - bzh_network
     ports:
       - '8080:3000'
