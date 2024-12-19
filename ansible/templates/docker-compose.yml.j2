@@ -7,5 +7,6 @@ services:
       - '8080:3000'
 
 networks:
-  bzh_network:
-    driver: bridge
+  network1:
+    name: bzh_network
+    external: true
