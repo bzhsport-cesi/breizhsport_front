@@ -18,7 +18,7 @@ export default async function Category({ params }: { params: Promise<{ slugs: st
 
     //TODO test response status & if data is empty or have more than 1 element
     const currentNodeResponse = await fetch(`${apiUrl}/categories?${currentNodeQuery}`);
-    const currentNode = (await currentNodeResponse.json()).data[0];
+    const currentNode = (await currentNodeResponse.json()).data[0]
 
     const childrenQuery = qs.stringify({
         filters: {
@@ -35,7 +35,8 @@ export default async function Category({ params }: { params: Promise<{ slugs: st
     const childrenResponse = await fetch(`${apiUrl}/categories?${childrenQuery}`);
     const children = (await childrenResponse.json()).data;
 
-    //TODO get products from each category (if depth = 0 -> all products etc.)
+    console.log(children);
+
     //TODO only one api call for all (see backend route)
 
     const productsQuery = qs.stringify({

@@ -11,6 +11,8 @@ import { useState } from "react"
 
 export default function VariantsSelect({ product }: { product: any }) {
     const [selectedVariant, setSelectedVariant] = useState(product.defaultVariant)
+    console.log(product.defaultVariant)
+
 
     const variants = [product.defaultVariant, product.variants].flat()
     const attributes = variants.map(variant => variant.attributes).flat()

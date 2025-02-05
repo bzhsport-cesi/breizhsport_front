@@ -51,7 +51,7 @@ export default async function Product({ params, searchParams }: Readonly<{ param
             <div>
                 <h1 className="font-bold text-xl">{product.name}</h1>
                 <span>{product.description}</span>
-                <Image width={800} height={800} src={`${strapirl}${product.defaultVariant.images[0].url}`} alt={""} />
+                {/* <Image width={800} height={800} src={`${strapirl}${product.defaultVariant.images[0].url}`} alt={""} /> */}
                 <div>
                     <VariantsSelect product={product} />
                 </div>
