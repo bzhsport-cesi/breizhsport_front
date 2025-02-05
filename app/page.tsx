@@ -1,9 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
+const qs = require('qs');
+
 export default async function Home() {
 
+
   const apiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL;
-  const response = await fetch(`${apiUrl}/categories?filters[parent][$null]=true`);
+
+  const query = qs.stringify({
+    filters: {
+      depth: 0,
+    }
+  })
+
+  const response = await fetch(`${apiUrl}/categories?${query}`);
   const categories = await response.json();
 
 

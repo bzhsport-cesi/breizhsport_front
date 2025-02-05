@@ -15,7 +15,7 @@ export default function NavBar() {
                     <Menu width={32} height={32} className="md:hidden ml-2" onClick={() => setMenuOpen(true)} />
                     <div className="flex items-center gap-2">
                         <Trophy width={32} height={32} />
-                        <span className=" font-bold">Breizh Sports</span>
+                        <Link className=" font-bold" href="/">Breizh Sports</Link>
                     </div>
                 </div>
 
