@@ -38,6 +38,20 @@ export default async function Category({ params }: { params: Promise<{ slugs: st
     //TODO get products from each category (if depth = 0 -> all products etc.)
     //TODO only one api call for all (see backend route)
 
+    const productsQuery = qs.stringify({
+        filters: {
+            category: {
+                slug: {
+                    $startsWith: `${currentUrl}`
+                }
+            }
+        },
+        populate: ['category', 'defaultVariant'] // Charge la catégorie associée
+    }, { encodeValuesOnly: true });
+
+    const data = await fetch(`${apiUrl}/products?${productsQuery}`);
+    const products = (await data.json()).data;
+
     return (
         <main className="p-2 flex flex-col gap-4">
             <h1 className="text-center font-bold">Check our {currentNode.name} {children.length > 0 ? 'categories' : 'products'} !</h1>
@@ -45,6 +59,15 @@ export default async function Category({ params }: { params: Promise<{ slugs: st
                 {children?.map((category: any) => (
                     <div className="bg-card p-2 rounded-lg border text-center" key={category.documentId}>
                         <Link href={`/category${category.slug}`}>{category.name}</Link>
+                    </div>
+                ))}
+            </div>
+            <h2>Check our products !</h2>
+            <div className="grid grid-cols-3 gap-2">
+                {products?.map((product: any) => (
+                    <div className="bg-card p-2 rounded-lg border text-center flex flex-col justify-center items-center" key={product.documentId}>
+                        <Link href={`/product/${product.slug}`}>{product.name}</Link>
+                        <span>{product.defaultVariant.price} €</span>
                     </div>
                 ))}
             </div>
