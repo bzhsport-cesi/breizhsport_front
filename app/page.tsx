@@ -1,3 +1,4 @@
+import { ICategory, IStrapiAPIResponse } from "@/types/types";
 import Image from "next/image";
 import Link from "next/link";
 const qs = require('qs');
@@ -15,7 +16,9 @@ export default async function Home() {
 
   //TODO test response status and handle errors
   const response = await fetch(`${apiUrl}/categories?${query}`);
-  const categories = await response.json();
+  const categories = await response.json() as IStrapiAPIResponse<ICategory>;
+
+  console.log(categories)
 
   return (
     <main className="flex flex-col gap-4">

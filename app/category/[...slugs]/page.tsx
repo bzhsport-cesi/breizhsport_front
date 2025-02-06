@@ -1,61 +1,27 @@
 import Link from "next/link";
 
+import { ICategory, IExtendedProduct, IProduct } from "@/types/types";
+
 const qs = require('qs');
 
 
 export default async function Category({ params }: { params: Promise<{ slugs: string[] }> }) {
     const apiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL;
+    const backendUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
     const slugs = (await params).slugs;
 
     const currentUrl = "/" + slugs.join('/');
 
-    const currentNodeQuery = qs.stringify({
-        filters: {
-            slug: currentUrl
-        },
-    }, { encodeValuesOnly: true })
+    //TODO test response status and handle errors
+    //TODO parse returned data to IStrapiAPIResponse
+    const response = await fetch(`${apiUrl}/categories/slug-tree${currentUrl}`);
+    const { currentCategory, children, products } = await response.json() as { currentCategory: ICategory, children: ICategory[], products: IExtendedProduct[] };
 
-
-    //TODO test response status & if data is empty or have more than 1 element
-    const currentNodeResponse = await fetch(`${apiUrl}/categories?${currentNodeQuery}`);
-    const currentNode = (await currentNodeResponse.json()).data[0]
-
-    const childrenQuery = qs.stringify({
-        filters: {
-            slug: {
-                $startsWith: `${currentUrl}/`,
-                $notEq: `${currentUrl}`
-            },
-            depth: {
-                $eq: currentNode.depth + 1
-            }
-        },
-    }, { encodeValuesOnly: true })
-
-    const childrenResponse = await fetch(`${apiUrl}/categories?${childrenQuery}`);
-    const children = (await childrenResponse.json()).data;
-
-    console.log(children);
-
-    //TODO only one api call for all (see backend route)
-
-    const productsQuery = qs.stringify({
-        filters: {
-            category: {
-                slug: {
-                    $startsWith: `${currentUrl}`
-                }
-            }
-        },
-        populate: ['category', 'defaultVariant'] // Charge la catégorie associée
-    }, { encodeValuesOnly: true });
-
-    const data = await fetch(`${apiUrl}/products?${productsQuery}`);
-    const products = (await data.json()).data;
+    console.log(products)
 
     return (
         <main className="p-2 flex flex-col gap-4">
-            <h1 className="text-center font-bold">Check our {currentNode.name} {children.length > 0 ? 'categories' : 'products'} !</h1>
+            <h1 className="text-center font-bold">Check our {currentCategory.name} {children.length > 0 ? 'categories' : 'products'} !</h1>
             <div className="grid grid-cols-2 gap-2">
                 {children?.map((category: any) => (
                     <div className="bg-card p-2 rounded-lg border text-center" key={category.documentId}>
@@ -64,13 +30,15 @@ export default async function Category({ params }: { params: Promise<{ slugs: st
                 ))}
             </div>
             <h2>Check our products !</h2>
-            <div className="grid grid-cols-3 gap-2">
-                {products?.map((product: any) => (
-                    <div className="bg-card p-2 rounded-lg border text-center flex flex-col justify-center items-center" key={product.documentId}>
-                        <Link href={`/product/${product.slug}`}>{product.name}</Link>
+            <div className="grid grid-cols-2 gap-2">
+                {products?.map((product: IExtendedProduct) => (
+                    <Link href={`/product/${product.slug}`} className="bg-card p-2 rounded-lg border text-center flex flex-col justify-center items-center" key={product.documentId}>
+                        <img src={!product.defaultVariant.images ? 'https://placehold.co/800x800.png' : `${backendUrl}${product.defaultVariant.images[0].url}`} />
+                        <span >{product.name}</span>
                         <span>{product.defaultVariant.price} €</span>
-                    </div>
+                    </Link>
                 ))}
+                {!products && <div>No products found</div>}
             </div>
         </main>
     );
