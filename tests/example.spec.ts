@@ -1,10 +1,13 @@
 import { test, expect, Page } from '@playwright/test';
 
 test('homepage has title', async ({ page }: { page: Page }) => {
-  const content = await page.content();
-  console.log(content);
   await page.goto('/');
-  await page.waitForLoadState('load');
+  await page.waitForLoadState('networkidle');
+  const content = await page.content();
+  console.log('MAXIME - contenu');
+  console.log(content);
+  console.log('MAXIME - url');
+  console.log(page.url());
   const title = await page.title();
   expect(title).toBe('Create Next App');
 });
