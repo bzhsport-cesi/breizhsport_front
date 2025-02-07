@@ -1,4 +1,4 @@
-import Image from 'next/image';
+//import Image from 'next/image';
 import Link from 'next/link';
 export default async function Home() {
   const apiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL;
@@ -10,12 +10,12 @@ export default async function Home() {
   return (
     <main className='flex flex-col gap-4'>
       <div className='w-full h-96 relative'>
-        <Image
+        {/* <Image
           src='/images/hero.jpg'
           alt='Picture of the author'
           layout='fill'
           objectFit='cover'
-        />
+        /> */}
         <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center'>
           <h1 className='text-4xl font-bold text-white'>
             Welcome to Breizh Sports
