@@ -19,6 +19,10 @@ jobs:
         run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+      - name: Start Next.js application
+        run: npm run dev &
+        env:
+          PORT: 3000
       - name: Run Playwright tests
         run: npx playwright test
       - uses: actions/upload-artifact@v4
