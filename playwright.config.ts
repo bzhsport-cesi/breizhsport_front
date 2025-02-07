@@ -7,5 +7,6 @@ export default defineConfig({
     headless: true,
     actionTimeout: 0,
     ignoreHTTPSErrors: true,
+    baseURL: 'http://127.0.0.1:3000',
   },
 });
