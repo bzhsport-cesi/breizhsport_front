@@ -1,11 +1,22 @@
 //import Image from 'next/image';
 import Link from 'next/link';
+
 export default async function Home() {
   const apiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL;
-  const response = await fetch(
-    `${apiUrl}/categories?filters[parent][$null]=true`
-  );
-  const categories = await response.json();
+  let categories = { data: [] };
+
+  if (!apiUrl) {
+    console.warn('API URL is not defined in environment variables');
+  } else {
+    try {
+      const response = await fetch(
+        `${apiUrl}/categories?filters[parent][$null]=true`
+      );
+      categories = await response.json();
+    } catch (error) {
+      console.error('Failed to fetch categories:', error);
+    }
+  }
 
   return (
     <main className='flex flex-col gap-4'>
@@ -27,18 +38,26 @@ export default async function Home() {
       </div>
       <div className='p-2'>
         <h2 className='font-bold text-center'>Fetch our products by sport :</h2>
-        <div className='grid grid-cols-2 justify-items-center gap-2'>
-          {categories.data?.map(
-            (category: { id: number; slug: string; name: string }) => (
-              <div
-                key={`category-${category.id}`}
-                className='p-2 w-full bg-card rounded-lg border text-center'
-              >
-                <Link href={`/category/${category.slug}`}>{category.name}</Link>
-              </div>
-            )
-          )}
-        </div>
+        {categories.data?.length > 0 ? (
+          <div className='grid grid-cols-2 justify-items-center gap-2'>
+            {categories.data.map(
+              (category: { id: number; slug: string; name: string }) => (
+                <div
+                  key={`category-${category.id}`}
+                  className='p-2 w-full bg-card rounded-lg border text-center'
+                >
+                  <Link href={`/category/${category.slug}`}>
+                    {category.name}
+                  </Link>
+                </div>
+              )
+            )}
+          </div>
+        ) : (
+          <p className='text-center text-muted-foreground'>
+            No categories available
+          </p>
+        )}
       </div>
     </main>
   );
