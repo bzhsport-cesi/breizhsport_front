@@ -1,27 +1,32 @@
-# Stage 1: install dependencies
+# Stage 1: Installation des dépendances uniquement
 FROM node:22-alpine AS deps
 WORKDIR /app
 COPY package*.json ./
-ARG NODE_ENV
-ENV NODE_ENV $NODE_ENV
-RUN npm install
+RUN npm install --production=false
 
-# Stage 2: build
+# Stage 2: Construction de l'application
 FROM node:22-alpine AS builder
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 RUN npm run build
 
-# Stage 3: run
+# Stage 3: Installation des dépendances PRODUCTION uniquement
+FROM node:22-alpine AS prod-deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm install --production
+
+# Stage final : Exécution en production optimisée
 FROM node:22-alpine
 WORKDIR /app
+
 COPY --chown=node:node --from=builder /app/.next ./.next
 COPY --chown=node:node --from=builder /app/public ./public
-COPY --chown=node:node --from=builder /app/node_modules ./node_modules
-COPY --chown=node:node --from=builder /app/package.json ./
+COPY --chown=node:node --from=prod-deps /app/node_modules ./node_modules
+COPY --chown=node:node package.json ./
 
 EXPOSE 3000
-
 USER node
-CMD ["npm", "run", "start"]
+
+CMD ["node_modules/.bin/next", "start"]
