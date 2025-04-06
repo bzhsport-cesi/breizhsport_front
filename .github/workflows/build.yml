@@ -1,9 +1,9 @@
-name: Build and Deploy Frontend + Trigger Infra
+name: Build and Deploy Frontend + Trigger infra
 
 on:
   push:
     branches:
-      - main
+      - master
       - infra
   workflow_dispatch:
 
