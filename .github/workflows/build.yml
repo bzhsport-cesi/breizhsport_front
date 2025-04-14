@@ -1,10 +1,10 @@
 name: Build and Deploy Frontend + Trigger infra
 
 on:
-  push:
-    branches:
-      - master
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Playwright Tests"]
+    types:
+      - completed
 
 permissions:
   contents: read
@@ -12,6 +12,7 @@ permissions:
 
 jobs:
   docker:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Build & Push Frontend Docker Image
     runs-on: ubuntu-latest
     steps:
@@ -53,7 +54,7 @@ jobs:
   trigger-infra:
     name: Trigger Infra Deploy
     runs-on: ubuntu-latest
-    needs: docker  # Attend la fin du build d'image
+    needs: docker # Attend la fin du build d'image
     steps:
       - name: Trigger Deployment in breizhsport_infra
         uses: peter-evans/repository-dispatch@v3
