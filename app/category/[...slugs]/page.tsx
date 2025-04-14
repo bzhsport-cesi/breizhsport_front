@@ -14,10 +14,10 @@ export default async function Category({ params }: { params: Promise<{ slugs: st
 
     //TODO test response status and handle errors
     //TODO parse returned data to IStrapiAPIResponse
-    const response = await fetch(`${apiUrl}/categories/slug-tree${currentUrl}`);
+    const response = await fetch(`${apiUrl}/categories/category-page${currentUrl}`);
     const { currentCategory, children, products } = await response.json() as { currentCategory: ICategory, children: ICategory[], products: IExtendedProduct[] };
 
-    console.log(products)
+    console.log(await response.json());   
 
     return (
         <main className="p-2 flex flex-col gap-4">

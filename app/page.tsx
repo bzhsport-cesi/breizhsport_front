@@ -15,6 +15,7 @@ export default async function Home() {
   })
 
   //TODO test response status and handle errors
+  console.log(`${apiUrl}/categories?${query}`)
   const response = await fetch(`${apiUrl}/categories?${query}`);
   const categories = await response.json() as IStrapiAPIResponse<ICategory>;
 
