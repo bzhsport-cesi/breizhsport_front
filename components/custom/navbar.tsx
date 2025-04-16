@@ -3,10 +3,12 @@ import { X, Menu, Trophy, User, ShoppingCart } from "lucide-react";
 import Search from "@/components/custom/search";
 import { useState } from "react";
 import Link from "next/link";
+import useSession from "@/hooks/use-session";
 
 export default function NavBar() {
     const [menuOpen, setMenuOpen] = useState(false)
 
+    const { session } = useSession()
 
     return (
         <nav className="flex flex-col">

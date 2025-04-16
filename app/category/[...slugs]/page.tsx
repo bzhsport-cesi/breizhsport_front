@@ -14,10 +14,9 @@ export default async function Category({ params }: { params: Promise<{ slugs: st
 
     //TODO test response status and handle errors
     //TODO parse returned data to IStrapiAPIResponse
-    const response = await fetch(`${apiUrl}/categories/category-page${currentUrl}`);
+    const response = await fetch(`${apiUrl}/category-page${currentUrl}`);
     const { currentCategory, children, products } = await response.json() as { currentCategory: ICategory, children: ICategory[], products: IExtendedProduct[] };
 
-    console.log(await response.json());   
 
     return (
         <main className="p-2 flex flex-col gap-4">
@@ -32,7 +31,7 @@ export default async function Category({ params }: { params: Promise<{ slugs: st
             <h2>Check our products !</h2>
             <div className="grid grid-cols-2 gap-2">
                 {products?.map((product: IExtendedProduct) => (
-                    <Link href={`/product/${product.slug}`} className="bg-card p-2 rounded-lg border text-center flex flex-col justify-center items-center" key={product.documentId}>
+                    <Link href={`/product/${product.slug}`} className="bg-card p-2 rounded-lg border text-center flex flex-col justify-center items-center max-w-64" key={product.documentId}>
                         <img src={!product.defaultVariant.images ? 'https://placehold.co/800x800.png' : `${backendUrl}${product.defaultVariant.images[0].url}`} />
                         <span >{product.name}</span>
                         <span>{product.defaultVariant.price} €</span>

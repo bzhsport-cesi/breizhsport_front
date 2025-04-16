@@ -19,8 +19,6 @@ export default async function Home() {
   const response = await fetch(`${apiUrl}/categories?${query}`);
   const categories = await response.json() as IStrapiAPIResponse<ICategory>;
 
-  console.log(categories)
-
   return (
     <main className="flex flex-col gap-4">
       <div className="w-full h-96 relative">
