@@ -30,8 +30,6 @@ export default function Search({ placeholder = "Search..." }: { placeholder?: st
         }
 
     }
-    push(`${pathname}?${params.toString()}`, { scroll: false });
-  };
 
     return (
         <div className="relative">
