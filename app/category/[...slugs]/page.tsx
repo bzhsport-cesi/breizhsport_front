@@ -1,13 +1,14 @@
 import Link from "next/link";
 
 import { ICategory, IExtendedProduct, IProduct } from "@/types/types";
+import ProductCard from "@/components/custom/shop/product-card";
 
 const qs = require('qs');
 
 
 export default async function Category({ params }: { params: Promise<{ slugs: string[] }> }) {
     const apiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL;
-    const backendUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
+
     const slugs = (await params).slugs;
 
     const currentUrl = "/" + slugs.join('/');
@@ -37,11 +38,7 @@ export default async function Category({ params }: { params: Promise<{ slugs: st
             <h2>Check our products !</h2>
             <div className="grid grid-cols-2 gap-2 lg:grid-cols-6 md:grid-cols-3 justify-items-center">
                 {products?.map((product: IExtendedProduct) => (
-                    <Link href={`/product/${product.slug}`} className="bg-card p-2 rounded-lg border text-center flex flex-col justify-center items-center max-w-64" key={product.documentId}>
-                        <img src={!product.defaultVariant.images ? 'https://placehold.co/800x800.png' : `${backendUrl}${product.defaultVariant.images[0].url}`} />
-                        <span >{product.name}</span>
-                        <span>{product.defaultVariant.price} €</span>
-                    </Link>
+                    <ProductCard product={product} key={`product-${product.documentId}`} />
                 ))}
                 {!products && <div>No products found</div>}
             </div>
