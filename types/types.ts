@@ -40,6 +40,19 @@ export interface ICategory {
     depth: number
 }
 
+export interface IUser {
+    id: number,
+    documentId: string,
+    email: string,
+    username: string,
+    provider: string,
+    confirmed: boolean,
+    blocked: boolean,
+    publishedAt: Date,
+    createdAt: Date,
+    updatedAt: Date,
+}
+
 // EXTENTED COLLECTIONS //
 
 export interface IExtendedCategory extends ICategory {

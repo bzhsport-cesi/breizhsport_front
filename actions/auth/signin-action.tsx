@@ -1,5 +1,10 @@
+//actions/auth/signin-action.ts
 "use server"
+import { getIronSession } from "iron-session";
+import { cookies } from "next/headers";
+import { SessionData, sessionOptions } from "@/lib/session";
 import z from "zod"
+import { redirect } from "next/navigation";
 
 export default async function SignInAction(formData: FormData) {
 
@@ -32,8 +37,10 @@ export default async function SignInAction(formData: FormData) {
     if (res.status !== 200) {
         return { error: json.error.message }
     }
-    const { jwt, user } = json
 
-    console.log("JWT", jwt)
-    console.log("User", user)
+    const session = await getIronSession<SessionData>(await cookies(), sessionOptions)
+    session.jwt = json.jwt
+    session.isLoggedIn = true
+
+    await session.save()
 }

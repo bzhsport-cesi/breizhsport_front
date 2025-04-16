@@ -1,9 +1,9 @@
+//lib/session.ts
 import type { SessionOptions } from "iron-session"
 
 export interface SessionData {
-    document_id?: string,
-    username?: string,
-    email?: string,
+    jwt?: string,
+
     isLoggedIn: boolean,
 }
 
