@@ -1,9 +1,10 @@
 //lib/session.ts
+import { IUser } from "@/types/types";
 import type { SessionOptions } from "iron-session"
 
 export interface SessionData {
     jwt?: string,
-
+    user?: IUser,
     isLoggedIn: boolean,
 }
 
@@ -17,6 +18,7 @@ export const sessionOptions: SessionOptions = {
 
 export const defaultSession: SessionData = {
     isLoggedIn: false,
+    user: undefined
 };
 
 // This is where we specify the typings of req.session.*

@@ -41,6 +41,7 @@ export default async function SignInAction(formData: FormData) {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions)
     session.jwt = json.jwt
     session.isLoggedIn = true
+    session.user = json.user
 
     await session.save()
 }
