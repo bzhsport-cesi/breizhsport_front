@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { ICategory, IExtendedProduct, IProduct } from "@/types/types";
-import ProductCard from "@/components/custom/shop/product-card";
+import ProductCard from "@/components/custom/shop/product/product-card";
 
 const qs = require('qs');
 
