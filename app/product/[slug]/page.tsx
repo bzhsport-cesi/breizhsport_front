@@ -1,3 +1,4 @@
+import ProductPres from "@/components/custom/shop/product/product-pres";
 import VariantsSelect from "@/components/custom/variants-select";
 import { IExtendedProduct, IStrapiAPIResponse } from "@/types/types";
 import Image from "next/image";
@@ -8,7 +9,6 @@ const qs = require('qs');
 export default async function Product({ params, searchParams }: Readonly<{ params: Promise<{ slug: string[] }>, searchParams: Promise<{ [key: string]: string | string[] | undefined }> }>) {
 
     const apiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL
-    const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
     const productSlug = (await params).slug
 
@@ -52,9 +52,7 @@ export default async function Product({ params, searchParams }: Readonly<{ param
                 `${crumb} > ${index === breadCrumbs.length - 1 ? product.name : ''}`
             ))}</span>
             <div>
-                <h1 className="font-bold text-xl">{product.name}</h1>
-                <span>{product.description}</span>
-                <Image width={800} height={800} src={product.defaultVariant.images ? `${strapiUrl}/${product.defaultVariant.images[0].url}` : 'https://placehold.co/800x800.png'} alt={""} />
+                <ProductPres product={product} />
             </div>
         </main>
     )
