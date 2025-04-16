@@ -4,6 +4,7 @@
 import useSWR, { mutate } from "swr";
 import { useRouter } from "next/navigation";
 import { SessionData, defaultSession } from "@/lib/session";
+import { IUser } from "@/types/types";
 
 const sessionApiRoute = "/api/me";
 
@@ -56,8 +57,10 @@ export function useAuth() {
         return res;
     }
 
+    const user: IUser | undefined = data?.user ?? undefined
+
     return {
-        user: data,
+        user: user,
         isLoading,
         isError: error,
         signIn,
