@@ -1,11 +1,20 @@
+import { IStrapiAPIResponse, IUser } from "@/types/types";
 
 
 export default async function ProfilePage() {
     const apiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL;
+    let user: IUser | null = null;
 
-    const data = await fetch(`${apiUrl}/users/me`)
-    const test = await data.json()
-    console.log("test", test)
+    try {
+        const res = await fetch(`${apiUrl}/users/me`)
+        if (res.ok) {
+            user = await res.json() as IUser
+        } else {
+            console.error("Error fetching user data:", res.statusText)
+        }
+    } catch (error) {
+        console.error(error)
+    }
 
     return (
         <main className="flex flex-col gap-2 p-2">

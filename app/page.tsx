@@ -8,16 +8,26 @@ export default async function Home() {
 
   const apiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL;
 
+  let categories: IStrapiAPIResponse<ICategory> | null = null;
+
   const query = qs.stringify({
     filters: {
       depth: 0,
     }
   })
 
-  //TODO test response status and handle errors
-  console.log(`${apiUrl}/categories?${query}`)
-  const response = await fetch(`${apiUrl}/categories?${query}`);
-  const categories = await response.json() as IStrapiAPIResponse<ICategory>;
+  try {
+    const response = await fetch(`${apiUrl}/categories?${query}`);
+    if (response.ok) {
+      categories = await response.json() as IStrapiAPIResponse<ICategory>;
+    }
+    else {
+      console.error("Error fetching categories:", response.statusText)
+    }
+  } catch (error) {
+    console.error("Error fetching categories:", error)
+  }
+
 
   return (
     <main className="flex flex-col gap-4">
