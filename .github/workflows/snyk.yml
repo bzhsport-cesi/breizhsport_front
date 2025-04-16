@@ -1,8 +1,6 @@
 name: Snyk Security Analysis
 
 on:
-  # Ce workflow se déclenche lorsqu'il y a un push ou une pull request sur la branche master,
-  # ainsi que lors d'un déclenchement manuel (workflow_dispatch).
   push:
     branches:
       - master
@@ -20,30 +18,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Récupère le code source du dépôt
+      # 1. Clone le dépôt
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Installe la CLI Snyk (dernière version)
+      # 2. Installe la dernière version de la CLI Snyk
       - name: Set up Snyk
         uses: snyk/actions/setup@master
-        with:
-          version: 'latest'
 
-      # 3. Authentifie Snyk avec le token stocké dans les secrets GitHub
+      # 3. Authentifie Snyk avec ton token GitHub Secret
       - name: Authenticate Snyk
         run: snyk auth $SNYK_TOKEN
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      # 4. Analyse les dépendances de tous les projets détectés pour trouver des vulnérabilités
+      # 4. Scan de sécurité (mode debug activé)
       - name: Test for vulnerabilities
-        run: snyk test --all-projects --severity-threshold=medium
+        run: DEBUG=* snyk test --severity-threshold=medium
+        # Si tu veux tester tous les projets, remplace par :
+        # run: DEBUG=* snyk test --all-projects --severity-threshold=medium
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      # 5. (Optionnel) Envoie les informations du projet à Snyk pour un suivi continu
+      # 5. Envoie le projet vers le dashboard Snyk
       - name: Monitor project in Snyk
-        run: snyk monitor --all-projects
+        run: snyk monitor
+        # Pour tous les projets : snyk monitor --all-projects
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
