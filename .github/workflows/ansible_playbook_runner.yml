@@ -1,35 +1,37 @@
 name: Deploy with Ansible
 
 on:
+  pull_request:
+    branches: [master]
   workflow_run:
-    workflows: ["Build and Publish Docker image"]
-    types: 
+    workflows: ['Build and Publish Docker image']
+    types:
       - completed
   workflow_dispatch:
-      inputs:
-        is_manual:
-          required: false
-          type: boolean
-          default: false
+    inputs:
+      is_manual:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   run-playbooks:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up SSH
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
-          chmod 600 private_key.pem     
+          chmod 600 private_key.pem
 
       - name: Install Ansible
         shell: bash
         run: |
           sudo apt update
           sudo apt install -y ansible
-  
+
       - name: Run Ansible Playbook
         env:
           ANSIBLE_USER: ${{ secrets.ANSIBLE_USER }}

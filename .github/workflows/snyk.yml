@@ -27,8 +27,6 @@ jobs:
       # 2. Installe la CLI Snyk (dernière version)
       - name: Set up Snyk
         uses: snyk/actions/setup@master
-        with:
-          version: 'latest'
 
       # 3. Authentifie Snyk avec le token stocké dans les secrets GitHub
       - name: Authenticate Snyk
