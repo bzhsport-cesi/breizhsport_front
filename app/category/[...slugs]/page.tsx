@@ -15,6 +15,12 @@ export default async function Category({ params }: { params: Promise<{ slugs: st
     //TODO test response status and handle errors
     //TODO parse returned data to IStrapiAPIResponse
     const response = await fetch(`${apiUrl}/category-page${currentUrl}`);
+    if (!response.ok) {
+        console.log("Error fetching data", response.statusText);
+        throw new Error('Failed to fetch data');
+
+    }
+
     const { currentCategory, children, products } = await response.json() as { currentCategory: ICategory, children: ICategory[], products: IExtendedProduct[] };
 
 
@@ -29,7 +35,7 @@ export default async function Category({ params }: { params: Promise<{ slugs: st
                 ))}
             </div>
             <h2>Check our products !</h2>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 lg:grid-cols-6 md:grid-cols-3 justify-items-center">
                 {products?.map((product: IExtendedProduct) => (
                     <Link href={`/product/${product.slug}`} className="bg-card p-2 rounded-lg border text-center flex flex-col justify-center items-center max-w-64" key={product.documentId}>
                         <img src={!product.defaultVariant.images ? 'https://placehold.co/800x800.png' : `${backendUrl}${product.defaultVariant.images[0].url}`} />

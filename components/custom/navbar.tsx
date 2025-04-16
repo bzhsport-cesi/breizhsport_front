@@ -64,7 +64,7 @@ export default function NavBar() {
                         </div>
                     }
                     {user &&
-                        <div className="nav-profile-dropdown">
+                        <div className="nav-profile-dropdown relative">
                             <User width={32} height={32} />
                             <div className="nav-profile-content absolute hidden flex-col z-50 right-0">
                                 <span>{user.username}</span>
