@@ -52,7 +52,7 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             PORT=3000
-            NEXT_PUBLIC_STRAPI_API_URL= ${{ secrets.STRAPI_URL }}
+            NEXT_PUBLIC_STRAPI_API_URL= ${{ secrets.STRAPI_API_URL }}
             NEXT_PUBLIC_STRAPI_URL=${{ secrets.STRAPI_URL }}
             AUTH_SECRET=${{ secrets.AUTH_SECRET }}
 
