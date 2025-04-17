@@ -7,6 +7,17 @@ RUN npm install --production=false
 # Stage 2: Construction de l'application
 FROM node:22-alpine AS builder
 WORKDIR /app
+
+# Define build arguments
+ARG PORT=3000
+ARG NEXT_PUBLIC_STRAPI_API_URL
+ARG NEXT_PUBLIC_STRAPI_URL
+
+# Set environment variables from build arguments
+ENV PORT=${PORT}
+ENV NEXT_PUBLIC_STRAPI_API_URL=${NEXT_PUBLIC_STRAPI_API_URL}
+ENV NEXT_PUBLIC_STRAPI_URL=${NEXT_PUBLIC_STRAPI_URL}
+
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 RUN npm run build
@@ -21,12 +32,22 @@ RUN npm install --production
 FROM node:22-alpine
 WORKDIR /app
 
+# Get the build arguments again for runtime
+ARG PORT=3000
+ARG NEXT_PUBLIC_STRAPI_API_URL
+ARG NEXT_PUBLIC_STRAPI_URL
+
+# Set environment variables for runtime
+ENV PORT=${PORT}
+ENV NEXT_PUBLIC_STRAPI_API_URL=${NEXT_PUBLIC_STRAPI_API_URL}
+ENV NEXT_PUBLIC_STRAPI_URL=${NEXT_PUBLIC_STRAPI_URL}
+
 COPY --chown=node:node --from=builder /app/.next ./.next
 COPY --chown=node:node --from=builder /app/public ./public
 COPY --chown=node:node --from=prod-deps /app/node_modules ./node_modules
 COPY --chown=node:node package.json ./
 
-EXPOSE 3000
+EXPOSE ${PORT}
 USER node
 
 CMD ["node_modules/.bin/next", "start"]
