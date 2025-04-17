@@ -23,6 +23,8 @@ jobs:
           npm run start &
         env:
           PORT: 3000
+          NEXT_PUBLIC_STRAPI_API_URL: http://localhost:1337
+          NEXT_PUBLIC_STRAPI_URL: http://localhost:1337
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests
