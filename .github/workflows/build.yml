@@ -50,10 +50,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args: |
-            PORT=3000
-            NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337
-            NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
 
   trigger-infra:
     name: Trigger Infra Deploy
