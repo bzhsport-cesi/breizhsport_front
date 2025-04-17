@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
     let user: IUser | null = null;
 
     if (!session?.jwt) {
+        console.error("No JWT found in session");
         return NextResponse.json(null);
     }
     try {
@@ -21,6 +22,7 @@ export async function GET(request: NextRequest) {
             cache: "no-store",
         });
         if (!res.ok) {
+            console.error("Error fetching user data:", res.statusText);
             return NextResponse.json(null);
         }
         user = await res.json();
@@ -28,7 +30,6 @@ export async function GET(request: NextRequest) {
         console.error("Error fetching user data:", error);
         return NextResponse.json(null);
     }
-
 
     return NextResponse.json(user);
 

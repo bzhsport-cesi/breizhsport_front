@@ -5,10 +5,13 @@ import useSWR, { mutate } from "swr";
 import { useRouter } from "next/navigation";
 import { SessionData, defaultSession } from "@/lib/session";
 import { IUser } from "@/types/types";
+import SignInAction from "@/actions/auth/signin-action";
+import SignOutAction from "@/actions/auth/signout-action";
+import RegisterAction from "@/actions/auth/register-action";
 
 const sessionApiRoute = "/api/me";
 
-async function fetcher(input: RequestInfo, init?: RequestInit): Promise<SessionData> {
+async function fetcher(input: RequestInfo, init?: RequestInit): Promise<IUser> {
     return fetch(input, {
         headers: {
             "Content-Type": "application/json",
@@ -23,8 +26,7 @@ async function fetcher(input: RequestInfo, init?: RequestInit): Promise<SessionD
 
 export function useAuth() {
     const router = useRouter();
-    const { data, error, isLoading } = useSWR<SessionData>(sessionApiRoute, fetcher, {
-        fallbackData: defaultSession,
+    const { data, error, isLoading } = useSWR<IUser>(sessionApiRoute, fetcher, {
     });
 
     async function refresh() {
@@ -33,7 +35,7 @@ export function useAuth() {
     }
 
     async function signIn(formData: FormData) {
-        const res = await (await import("@/actions/auth/signin-action")).default(formData);
+        const res = await SignInAction(formData);
         if (!res?.error) {
             await refresh();
             router.push("/");
@@ -42,14 +44,14 @@ export function useAuth() {
     }
 
     async function signOut() {
-        const res = await (await import("@/actions/auth/signout-action")).default();
+        const res = await SignOutAction();
         await refresh();
         router.push("/");
         return res;
     }
 
     async function register(formData: FormData) {
-        const res = await (await import("@/actions/auth/register-action")).default(formData);
+        const res = await RegisterAction(formData);
         if (!res?.error) {
             await refresh();
             router.push("/");
@@ -57,10 +59,8 @@ export function useAuth() {
         return res;
     }
 
-    const user: IUser | undefined = data?.user ?? undefined
-
     return {
-        user: user,
+        user: data,
         isLoading,
         isError: error,
         signIn,
