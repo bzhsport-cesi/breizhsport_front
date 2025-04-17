@@ -54,6 +54,7 @@ jobs:
             PORT=3000
             NEXT_PUBLIC_STRAPI_API_URL= ${{ secrets.STRAPI_URL }}
             NEXT_PUBLIC_STRAPI_URL=${{ secrets.STRAPI_URL }}
+            AUTH_SECRET=${{ secrets.AUTH_SECRET }}
 
   trigger-infra:
     name: Trigger Infra Deploy
