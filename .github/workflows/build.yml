@@ -2,7 +2,7 @@ name: Build and Deploy Frontend + Trigger infra
 
 on:
   workflow_run:
-    workflows: ["Playwright Tests"]
+    workflows: ['Playwright Tests']
     types:
       - completed
 
@@ -50,6 +50,10 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            PORT=3000
+            NEXT_PUBLIC_STRAPI_API_URL= ${{ secrets.STRAPI_URL }}
+            NEXT_PUBLIC_STRAPI_URL=${{ secrets.STRAPI_URL }}
 
   trigger-infra:
     name: Trigger Infra Deploy
